@@ -64,10 +64,157 @@ P = {
 G = (N, S, T, P)
 
 N = { <palabra>, <caracter> }
-T = {  'A'...'Z', 'a'...'z', '0'...'9' }
+T = {  'A'...'Z', 'a'...'z', '0'...'9', ' ' }
 S = { <palabra> }
 P = { 
-    <palabras> ::= <palabra><caracter> | <caracter>
-    <caracter> ::= 'A'...'Z' | 'a'...'z' | '0'...'9'
+    <palabras> ::= <caracter><palabra> | <caracter>
+    <caracter> ::= 'A'...'Z' | 'a'...'z' | '0'...'9' | ' '
+}
+```
+
+# 7. Defina en EBNF la gramática para la definición de números reales. Inténtelo desarrollar para BNF y explique las diferencias con la utilización de la gramática EBNF.
+
+EBNF:
+```bnf
+G = (N, S, T, P)
+
+N = { <real>, <digito> }
+T = { 0..9, '.' }
+S = { <real> }
+P = {
+    <real> ::= [('+'|'-')] {<digito>}+ ['.' {<digito>}+]
+    <digito> ::= 0..9
+}
+```
+
+# 8. Utilizando la gramática que desarrolló en los puntos 6 y 7, escriba el árbol sintáctico de:
+
+### a. Conceptos
+
+<img src="./img/Practica 2/p2ej8a.png">
+
+### b. Programación
+
+<img src="./img/Practica 2/p2ej8b.png">
+
+### c. 1255869
+
+zzz
+
+### d. 854,26
+
+<img src="./img/Practica 2/p2ej8d.png">
+
+### e. Conceptos de lenguajes
+
+zzz
+
+#  9. Defina utilizando diagramas sintácticos la gramática para la definición de un identificador de un lenguaje de programación. Tenga presente como regla que un identificador no puede comenzar con números.
+
+<img src="./img/Practica 2/p2ej9.png">
+
+# 10.
+### a. Defina con EBNF la gramática para una expresión numérica, dónde intervienen variables y números. Considerar los operadores +, -, * y / sin orden de prioridad. No considerar el uso de paréntesis.
+
+```bnf
+G = (N, S, T, P)
+
+N = { <expresion>, <numero>, <operador>, <digito> }
+T = { '0'..'9', '+', '-', '*', '/', 'a'...'z' }
+S = { <expresion> }
+P = { 
+    <expresion> ::= (<numero> | <variable>) {<operacion>}+
+    <operacion> ::= <operador> (<numero> | <variable>)
+    <variable> ::= {<caracter>}+
+    <numero> ::= {<digito>}+
+    <caracter> ::= ( 'a' | ... 'z' )
+    <digito> ::= ( '0' | ... | '9' )
+    <operador> ::= ( '+' | '-' | '*' | '/' )
+}
+```
+
+### b. A la gramática definida en el ejercicio anterior agregarle prioridad de operadores.
+
+```bnf
+Siguiendo la gramática del ejercicio anterior
+
+P = { 
+    <expresion> ::= (<numero> | <variable>) {<suma_resta>}+
+    <operacion> ::= ( <mul_div>(<numero> | <variable>) | (<numero> | <variable>) )
+    <mul_div> ::= ( '*' | '/' ) <operacion>
+    <suma_resta> ::= ( '+' | '-' ) <operacion>
+    <variable> ::= {<caracter>}+
+    <numero> ::= {<digito>}+
+    <caracter> ::= ( 'a' | ... 'z' )
+    <digito> ::= ( '0' | ... | '9' )
+}
+```
+
+### c. Describa con sus palabras los pasos y decisiones que tomó para agregarle prioridad de operadores al ejercicio anterior.
+
+Para definir las prioridades hay que tener en cuenta la separación en términos de las expresiones matemáticas; las sumas y las restas son los identificadores para separar términos, por lo que las multiplicaciones y divisiones tienen mayor prioridad.
+
+Sabiendo esto, definimos en la expresión una repetición de operaciones de suma-resta, y dentro de estas definimos las multiplicaciones y divisiones.
+
+# 11. La siguiente gramática intenta describir sintácticamente la sentencia for de ADA, indique cuál/cuáles son los errores justificando la respuesta.
+```bnf
+N= {<sentencia_for>, <bloque>, <variable>, <letra>, <cadena>, <digito>, <otro>, <operacion>, <llamada_a_funcion>, <numero>, <sentencia> }
+
+P= {
+    <sentencia_for>::= for (i= IN 1..10) loop <bloque> end loop;
+    <variable>::= <letra> | <cadena>
+    <cadena>::= { ( <letra> | <digito> | <otro> ) }+
+    <letra>::=( a | .. | z | A | .. | Z )
+    <digito>::= ( 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 0 )
+    <bloque>::= <sentencia> | <sentencia> <bloque> | <bloque> <sentencia>
+    <sentencia>::= <sentencia_asignacion> | <llamada_a_funcion> | <sentencia_if> | <sentencia_for> | <sentencia_while> | <sentencia_switch>
+}
+```
+
+* `<otro> - <operación> - <llamada_a_funcion> - <numero>` no están definidos en *P*.
+* Está mezclando las técnicas de recursión de BNF con EBNF.
+* La definición de `<bloque>` es ambigua, porque el mismo resultado se puede obtener tanto desde `<sentencia> <bloque>` como  `<bloque> <sentencia>`.
+* `<sentencia_asignacion> - <sentencia_if> - <sentencia_while> - <sentencia_switch>` no están declarados en *N* ni definidos en las producciones, pero aún así se usan para definir a otros no terminales.
+* `<llamada_a_funcion>` no está definido en *P*.
+
+# 12. Realice en EBNF la gramática para la definición un tag `div` en HTML5.
+
+```bnf
+G = (N, S, T, P)
+
+N = { <div>, <abrirDiv>, <cerrarDiv>, <html>, <tag> }
+T = { 'a'...'z', '<', '>', '/' }
+S = { <expresion> }
+P = { 
+    <div> ::= <abrirDiv> { (<html> | <palabra>) }* <cerrarDiv>
+    <html> ::= <tag> (<html> | <palabra>) <tagCierre>
+    <tag> ::= '<' <palabra> {<attr>}* '>'
+    <tagCierre> ::= '</' <palabra> '>'
+    <attr> ::= <palabra> '=' '"' <palabra> '"'
+    <abrirDiv> ::= '<div>'
+    <cerrarDiv> ::= '</div>'
+    <palabra> ::= {'a'..'z'}*
+}
+```
+
+# 13. Defina en EBNF una gramática para la construcción de números primos. ¿Qué debería agregar a la gramática para completar el ejercicio?
+
+No se puede hacer porque EBNF no se encarga de las operaciones aritmético-lógicas que defina el programador.
+
+# 14. Sobre un lenguaje de su preferencia escriba en EBNF la gramática para la definición de funciones o métodos o procedimientos (considere los parámetros en caso de ser necesario)
+
+Siguiendo la definición de funciones en JavaScript `function nombre(a,b){ ... }`
+
+```bnf
+G = (N, S, T, P)
+
+N = { <funcion>, <parametros>, <palabra> }
+T = { 'a'..'z' }
+S = { <funcion> }
+P = {
+    <funcion> ::= 'function' <palabra> '(' [<parametros>] ')' '{' {<palabra>}* '}'
+    <parametros> ::= { (<palabra> | ', '<palabra>) }*
+    <palabra> ::= {letra}+
+    <letra> ::= ('a' | ... | 'z') 
 }
 ```

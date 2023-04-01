@@ -24,6 +24,19 @@ Las reglas sintácticas son aquellas que definen cómo se forman las expresiones
 
 # 4. ¿En la definición de un lenguaje, a qué se llama palabra reservadas? ¿A qué son equivalentes en la definición de una gramática? De un ejemplo de palabra reservada en el lenguaje que más conoce. (Ada, C, Ruby, Python, ...)
 
+Las palabras reserevadas son palabras clave que el programador nunca puede usar para nombrar a los identificadores.
+
+En el lenguaje de programación Java, algunas de las palabras reservadas son:
+
+| Palabras | Uso dentro del lenguaje |
+| -------- | ----------------------- |
+| `if` `for` `while` ... | Identifican el inicio de las estructuras de control. |
+| `boolean` `int` `double` ... | Representan a los tipos de datos. |
+| `public` `private` `protected` | Representan el la privacidad y el encapsulamiento de los datos, métodos y clases. |
+| `abstract` `class` `final` `interface` `extends` `implements` ... | Representan los parámetros a tener en cuenta al momento de crear clases o estructuras de herencia y comportamiento entre estas. |
+| `this` `super` | Identificadores usados para referenciar a la clase actual o a las superiores en una jerarquía. |
+| `try catch` | Identifican a las estructuras necesarias para el manejo de excepciones en tiempo de ejecución. |
+
 # 5. Dada la siguiente gramática escrita en BNF:
 ```java
 G = (N, T, S, P)
@@ -86,6 +99,21 @@ P = {
     <digito> ::= 0..9
 }
 ```
+BNF:
+```bnf
+G = (N, S, T, P)
+
+N = { <real>, <digito>, <numero> }
+T = { 0..9, '.', '+', '-' }
+S = { <real> }
+P = {
+
+    <real> ::= '+'|'-' <numero> | <numero> '.' <numero>
+    <numero> ::= <digito> | <digito><numero>
+    <digito> ::= 0 | ... | 9
+}
+```
+La diferencia principal entre ambos viene de la forma en la que realizan las repeticiones. BNF las realiza de manera recursiva, por lo que puede darse lugar a ambigüedades; por otro lado, EBNF usa las repeticiones de 0 o más elementos, por lo que las producciones quedan mucho más cortas y entendibles, además de que eliminan la posibilidad de ambigüedad.
 
 # 8. Utilizando la gramática que desarrolló en los puntos 6 y 7, escriba el árbol sintáctico de:
 
@@ -114,7 +142,7 @@ zzz
 <img src="./img/Practica 2/p2ej9.png">
 
 # 10.
-### a. Defina con EBNF la gramática para una expresión numérica, dónde intervienen variables y números. Considerar los operadores +, -, * y / sin orden de prioridad. No considerar el uso de paréntesis.
+### a. Defina con EBNF la gramática para una expresión numérica, donde intervienen variables y números. Considerar los operadores +, -, * y / sin orden de prioridad. No considerar el uso de paréntesis.
 
 ```bnf
 G = (N, S, T, P)

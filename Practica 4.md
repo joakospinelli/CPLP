@@ -183,8 +183,91 @@ Las variables estáticas son siempre globales porque están asociadas a la clase
 15- End.
 ```
 ## a. Indique el rango de instrucciones que representa el tiempo de vida de las variables i, h y mipuntero.
+
+| Variable | TTL |
+| -------- | --- |
+| i | 1-15 |
+| h | 1-15 |
+| mipuntero | 9-12 |
+
 ## b. Indique el rango de instrucciones que representa el alcance de las variables i, h y mipuntero.
+
+| Variable | Alcance |
+| -------- | ------- |
+| i | 4-15 |
+| h | 5-15 |
+| mipuntero | 3-15 |
+
 ## c. Indique si el programa anterior presenta un error al intentar escribir el valor de h. Justifique
+
+No, porque el símbolo ^ de `mipuntero^` indica que se está usando el valor que se encuentra en la dirección almacenada en el puntero, y no la dirección en sí. Por lo tanto, al almacenar ese valor en `h` se está guardando dicho valor.
+
 ## d. Indique si el programa anterior presenta un error al intentar asignar a i la resta de h con mipuntero. Justifique
+
+Esto sí va a tirar un error, porque el valor de `mipuntero` es una dirección de memoria, y por lo tanto no se puede restar con un entero.
+
 ## e. Determine si existe otra entidad que necesite ligar los atributos de alcance y tiempo de vida para justificar las respuestas anteriores. En ese caso indique cuál es la entidad y especifique su tiempo de vida y alcance.
-## f. Especifique el tipo de variable de acuerdo a la ligadura con el l-valor de las variables que encontró en el ejercicio.
+
+La entidad restante sería la que identifica el tipo `tpuntero`, pero no sé cuál sería su TTL o su alcance.
+
+## f. Especifique el tipo de variable de acuerdo a la ligadura con el L-Valor de las variables que encontró en el ejercicio.
+
+| Variable | L-Valor |
+| -------- | ------- |
+| i | Automático |
+| h | Automático |
+| mipuntero | Automático |
+| mipuntero^ | Dinámico |
+
+**Aclaración:** para el puntero se declara tanto `mipuntero` como `mipuntero^` porque la asignación de memoria del puntero se realiza automáticamente, pero la dirección a la que apunta se puede cambiar dinámicamente, por eso hay que marcar la diferencia.
+
+# 9. Elija un lenguaje y escriba un ejemplo:
+* **a.** En el cual el tiempo de vida de un identificador sea mayor que su alcance
+* **b.** En el cual el tiempo de vida de un identificador sea menor que su alcance
+* **c.** En el cual el tiempo de vida de un identificador sea igual que su alcance
+
+Está todo en la explicación práctica así que no lo hago 😴
+
+# 10. Si tengo la siguiente declaración al comienzo de un procedimiento y ese procedimiento NO contiene definiciones de procedimientos internos. ¿Puedo asegurar que el alcance y el tiempo de vida de la variable “c” es siempre todo el procedimiento en donde se encuentra definida?. Analícelo y justifique la respuesta, para todos los casos.
+```java
+int c; // en C
+var c: integer; // en Pascal
+c: integer; // en ADA
+```
+El alcance y tiempo de vida de `c` van a ser de todo el procedimiento en el que la variable haya sido declarada.
+
+Podría darse el caso en el que un procedimiento interno también declare una variable que se llame `c`, por lo que todas las referencias a ese identificador van a realizarse a la variable del procedimiento enterno; esto haría que el alcance de `c` global se reduzca. Sin embargo, en el enunciado se especifica que esto no pasa.
+
+# 11.
+## a. Responda Verdadero o Falso para cada opción. El tipo de dato de una variable es?
+1. **Un string de caracteres que se usa para referenciar a la variable y operaciones que se pueden realizar sobre ella:** Falso.
+2. **Conjunto de valores que puede tomar y un rango de instrucciones en el que se conoce el nombre:** Falso.
+3. **Conjunto de valores que puede tomar y lugar de memoria asociado con la variable:** Verdadero; el lugar en memoria y cómo se realiza la asignación (estática, automática o dinámica) dependen del tipo de variable.
+4. **Conjunto de valores que puede tomar y conjunto de operaciones que se pueden realizar sobre esos valores:** Verdadero.
+
+## b. Escriba la definición correcta de tipo de dato de una variable.
+
+El tipo de dato de una variable define el conjunto de valores válidos que puede contener y qué operaciones se pueden realizar con ella.
+
+# 12. Sea el siguiente programa en ADA, completar el cuadro siguiente indicando para cada variable de que tipo es en cuanto al momento de ligadura de su L-Valor, su R-Valor al momento de alocación en memoria y para todos los identificadores cuál es su alcance y cual es su el tiempo de vida. Indicar para cada variable su R-Valor al momento de alocación en memoria
+
+<img src="./img/Practica 4/p4ej12.png">
+
+| Identificador | Tipo | R-Valor | Alcance | TTL |
+| ------------- | ---- | ------- | ------- | --- |
+| a (línea 4) | Automática | Basura | 4-14 | 1-14 |
+| n (línea 4) | Automática | Basura | 4-14 | 1-14 |
+| p (línea 4) | Automática | Basura | 4-14 | 1-14 |
+| v1 (línea 5) | Dinámica | 0 | 5-14 |  1-14 |
+| c1 (línea 6) | Estática | 10 | 6-14 | 1-14 |
+| v2 (línea 7.2) | Dinámica | 0 | 7.2-7.6 | 7-7.6 |
+| c1 (línea 7.3) | Automática | Basura | 7.3-7.6 | 7-7.6 |
+| c2 (línea 7.3) | Automática | Basura | 7.3-7.6 | 7-7.6 |
+| p (línea 4) | Dinámica | Basura | 7.4-7.6 | 7.5.3-7.5.6 |
+| q (línea 4) | Dinámica | Basura | 7.4-7.6 | 7.5.3-7.5.8 |
+
+# 13. El nombre de una variable puede condicionar:
+* **Su tiempo de vida:** puede condicionarlo si al declarar la variable se agrega alguna palabra del lenguaje que incremente su tiempo de vida; por ejemplo, `static int edad`.
+* **Su alcance:** no depende del nombre de la variable, pero sí de dónde esté declarada.
+* **Su R-Valor:** su valor no depende del nombre de la variable.
+* **Su tipo:** en lenguajes fuertemente tipados, el tipo de la variable se define al nombrarla junto con el tipo; por ejemplo, `String nombre`.

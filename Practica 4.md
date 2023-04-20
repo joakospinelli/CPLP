@@ -270,4 +270,4 @@ El tipo de dato de una variable define el conjunto de valores válidos que puede
 * **Su tiempo de vida:** puede condicionarlo si al declarar la variable se agrega alguna palabra del lenguaje que incremente su tiempo de vida; por ejemplo, `static int edad`.
 * **Su alcance:** no depende del nombre de la variable, pero sí de dónde esté declarada.
 * **Su R-Valor:** su valor no depende del nombre de la variable.
-* **Su tipo:** en lenguajes fuertemente tipados, el tipo de la variable se define al nombrarla junto con el tipo; por ejemplo, `String nombre`.
+* **Su tipo:** en lenguajes fuertemente tipados, el tipo de la variable se define al nombrarla junto con el tipo; por ejemplo, `String nombre`. También hay lenguajes como C que usan algún caracter al principio del nombre para identificar que son de algún tipo en particular, como puede ser `*puntero`.

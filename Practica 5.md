@@ -214,3 +214,68 @@ end.
 Esto **claramente** está mal pero creo que aprendí de mis errores 🐱‍👤 ☝🤓
 
 <img src="./img/Practica 5/ej4dinamica.png">
+
+# 5. Sea el siguiente programa escrito en Pascal-like. Realice la pila de ejecución
+
+```pascal
+Program Main;
+Var
+    x, y, z:integer;
+    a, b: array[1..6] of integer;
+
+    Procedure B;
+    var
+        y,x: integer;
+
+        Procedure C;
+        var
+            c:integer;
+        begin
+            y:= y + 2; c:=2;
+            a(x):=a(x)*y;
+            if (y >7) then
+                b(y-6)=b(4)*2+b(y-6);
+            D;
+        end;
+    begin
+        x:=2; y:= x + 3;
+        C; x:= x + 1; write (x,y);
+    End;
+
+    Procedure D;
+    begin
+        x:= c + 5 + x;
+        y:= y + 2;
+    end;
+
+    Function C: integer;
+    begin
+        b(x):= b(x) + 1;
+        x:= x + 1;
+        a(y):=a(y)+b(x)+3;
+        a(x+2)=a(x) + 2;
+        return b(x);
+    end;
+
+begin
+    x:= 1; Y:= 2;
+    for z:=1 to 6 do begin
+        a(z):= z;
+        b(z):= z + 2;
+    end;
+    B;
+    for z:= to 6 do write (a(z), b(z));
+end.
+```
+
+## a. Siguiendo la cadena estática
+
+<img src="./img/Practica 5/ej5estatica.png">
+
+## b. Siguiendo la cadena dinámica
+
+<img src="./img/Practica 5/ej5dinamica.png">
+
+## c. La sentencia `x:= c + 5 + x`, podría reemplazarse por `x:= x + c + 5`? Justifique la respuesta
+
+Podría cambiarse, pero el resultado no sería el mismo. Esto se debe a que la evaluación de los valores en Pascal se realiza de izquierda a derecha, y `c` cambia el valor de `x`. Por lo tanto, si ejecutamos `c` primero vamos a sumar un valor modificado de `x`; en cambio, si sumamos `x` primero vamos a sumar su valor original.

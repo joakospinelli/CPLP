@@ -257,7 +257,119 @@ begin
     for y:= 1 to 5 do write (r2(y));
 end.
 ```
+**ESTE LO HABÍA HECHO MAL PORQUE HABÍA EVALUADO LAS EXPRESIONES POR NOMBRE USANDO LAS VARIABLES LOCALES DE LOS PROCEDIMIENTOS. LAS EXPRESIONES SE EVALÚAN SIEMPRE USANDO LAS VARIABLES DESDE DONDE SE INVOCA AL PROCEDIMIENTO**
 
 <img src="./img/Practica 6/ej7estatica.png">
 
 Las cadenas estáticas y dinámicas son iguales 🤝
+
+# 8.
+## a. Indique las diferencias entre los pasaje de subprogramas como parámetros "deep" y "shallow".
+
+Ni el ChatGPT lo sabe así que no lo voy a buscar 😴
+
+# 9. Sea el siguiente código escrito en Pascal-Like:
+
+```pascal
+Procedure main
+
+    a: array(1..5) of integer;
+    x: integer;
+    i;integer;
+
+    Procedure Uno (tipo_pasaje m:integer)
+    Begin
+        x:=0;
+        x:=x+1;
+        m:=m+x + a(3);
+        x:=x*2;
+        a(3):=a(3) - 1;
+        m:=m+1;
+    End;
+
+Begin
+    For i:=1 to 5 a(i):=1;
+    x:=3;
+    Uno(a(x));
+    For i:=1 to 5 write (a(i));
+End
+```
+
+## a. Plantee diferencias relacionada con la forma de implementación de cada uno y los resultados sobre este ejemplo, considerando los siguientes tipos de parámetros: nombre, referencia y valor-resultado.
+
+* **Nombre:** se va envía como parámetro la expresión `a[x]`. Al ser un parámetro por nombre esta expresión se va a evaluar cada vez que se usa el parámetro; como el valor de `x` cambia a lo largo del programa, se van a modificar diferentes posiciones de `a` en cada uso del parámetro.
+* **Referencia:** se envía como parámetro una referencia a la dirección de memoria de `x[3]`. Al ser un parámetro por referencia los cambios se van a realizar directamente sobre esa variable.
+* **Valor-resultado:** se envía como parámetro el valor actual de `x[3]`. Durante la ejecución del procedimiento se va a utilizar el parámetro como si fuese una variable local; al terminar, se retorna el valor actualizado a `x[3]` en el programa principal.
+
+| Tipo de parámetro | Imprime |
+| ----------------- | --------------- |
+| Nombre | [ 3, 2, 0, 1, 1 ] |
+| Referencia | [ 1, 1, 3, 1, 1 ] |
+| Valor-resultado | [ 1, 1, 4, 1, 1 ] |
+
+En el parámetro por nombre el valor de `x` se cambia internamente en el procedimiento, por lo tanto cambiaría el índice de la expresión `a[x]` al buscar el parámetro real.
+
+El parámetro por referencia está constantemente modificando el valor original de `a[3]`, tanto directamente como a través de la referencia en el parámetro `m`.
+
+El parámetro por valor-resultado toma el valor original de `a[3]` (que era 1), pero no modifica `a[3]` hasta que termina de ejecutarse. Durante el procedimiento se trata a `m` como una variable interna.
+
+## b. ¿Qué sucede si en Uno se agrega la declaración `x: integer`? Indique el resultado para cada uno de los tipos de pasajes de parámetros
+
+Los parámetros por referencia y valor-resultado no tendrían diferencias.
+
+El parámetro por nombre cambiaría porque el procedimiento va a modificar su variable local `x` en cada llamado, pero al evaluar la expresión `a[x]` usaría como índice a la variable `x` del Main.
+
+Usando un parámetro por nombre imprimiría `[ 1, 1, 3, 1, 1 ]`.
+
+# 10. Sea el siguiente programa escrito en Pascal:
+
+```pascal
+Program Uno;
+
+    var x:integer;
+
+    Function Dos:integer;
+    begin
+        x:= x + 1;
+        return (x);
+    end;
+
+    Procedure Tres (pasaje x:integer);
+    begin
+        x:= x + 5;
+        x:= Dos + 10;
+    end;
+
+begin
+    x:= 8; Tres(x);
+    write (x);
+end.
+```
+
+## a. Explique cómo simularía en Pascal el pasaje por valor-resultado y hágalo sobre este ejemplo.
+
+```pascal
+Program Uno;
+    
+    var x: integer;
+
+    Function Dos: integer;
+    begin
+        x := x + 1;
+        return x;
+    end;
+
+    Function Tres (x: integer): integer;
+    begin
+        x := x + 5;
+        x := Dos + 10;
+        return x;
+    end;
+
+begin
+    x := 8; Tres(x);
+    write(x);
+end.
+```
+
+Para simular el pasaje por valor-resultado en Pascal se pueden usar parámetros por valor en un función, y retornar el mismo parámetro modificado.

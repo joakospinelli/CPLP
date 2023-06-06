@@ -439,3 +439,220 @@ Resultado 0.1
 Vuelve a probar
 ```
 
+# 13. Dado el programa escrito en Java:
+```java
+public class ExcepcionUno extends Exception {
+    public ExcepcionUno(){
+        super(); // constructor por defecto de Exception
+    }
+
+    public ExcepcionUno(String cadena){
+        super(cadena); // constructor param. de Exception
+    }
+}
+
+
+public class ExcepcionDos extends Exception {
+    public ExcepcionDos(){
+        super(); // constructor por defecto de Exception
+    }
+    public ExcepcionDos(String cadena) {
+        super(cadena); // constructor param. de Exception
+    }
+}
+
+public class ExcepcionTres extends Exception {
+    public ExcepcionTres(){
+        super(); // constructor por defecto de Exception
+    }
+
+    public ExcepcionTres(String cadena) {
+        super(cadena); // constructor param. de Exception
+    }
+}
+```
+
+```java
+public class Lanzadora {
+    public void lanzaSiNegativo(int param) throws ExcepcionUno {
+    if (param < 0)
+        throw new ExcepcionUno("Numero negativo");
+    }
+
+    public void lanzaSimayor100(int param) throws ExcepcionDos {
+        if (param >100 and param<125)
+            throw new ExcepcionDos("Numero mayor100");
+    }
+    public void lanzaSimayor125(int param) throws ExcepcionTres {
+        if (param >= 125)
+            throw new ExcepcionTres("Numero mayor125");
+    }
+}
+```
+
+```java
+import java.io.FileInputStream;
+import java.io.IOException;
+public class Excepciones {
+
+    public static void main(String[] args) {
+        // Para leer un fichero
+        Lanzadora lanza = new Lanzadora();
+        FileInputStream entrada = null;
+        int leo;
+
+        try {
+            entrada = new FileInputStream("fich.txt");
+            while ((leo = entrada.read()) != -1){
+                if (leo < 0)
+                    lanza.lanzaSiNegativo(leo);
+                else if (leo > 100)
+                    lanza.lanzaSimayor100(leo);
+            }
+
+            entrada.close();
+            System.out.println("Todo fue bien");
+        }
+        catch (ExcepcionUno e) { // Personalizada
+            System.out.println("Excepcion: " + e.getMessage());
+        }
+        catch (ExcepcionDos e) { // Personalizada
+            System.out.println("Excepcion: " + e.getMessage());
+        }
+        catch (IOException e) { // Estándar
+            System.out.println("Excepcion: " + e.getMessage());
+        }
+        finally {
+        if (entrada != null)
+            try {
+                entrada.close(); // Siempre queda cerrado
+            }
+            catch (Exception e) {
+                System.out.println("Excepcion: " + e.getMessage());
+            }
+        System.out.println("Fichero cerrado.");
+        }
+    }
+}
+```
+## a. Indique cómo se ejecuta el código. Debe quedar en claro los caminos posibles de ejecución, cuales son los manejadores que se ejecutan y cómo se buscan los mismos y si en algún caso se produce algún error.
+
+El programa lee líneas de un archivo de texto hasta llegar a una que tenga el valor -1.
+
+Cuando itera sobre los valores leídos, revisa que no sean ni menores a 0 ni mayores a 100.
+* Si es menor a 0, se llama al método del objeto `Lanzadora` que lanza una excepción de tipo `ExcepcionUno`.
+* Si es mayor a 0, se llama al método del objeto `Lanzadora` que lanza una excepción de tipo `ExcepcionDos`.
+
+Si se encuentra el valor -1 y no se lanzaron excepciones, se cierra el lector de archivos y se notifica en consola que todo salió bien.
+
+El while se encuentra en una estructura `try-catch` que tiene definidos tres manejadores:
+1. Uno para `ExcepcionUno`, que se lanza explícitamente en el código. Imprime el mensaje de error en consola.
+2. Uno para `ExcepcionDos`, que se lanza explícitamente en el código. Imprime el mensaje de error en consola.
+3. Uno para `IOException`, que es la excepción lanzada por el lenguaje cuando tiene problema de operaciones de E/S; en este caso, al leer el archivo. Imprime el mensaje de error en consola.
+
+Cuando termina de iterar sobre las líneas, independientemente de si haya lanzado excepción o no, ejecuta el bloque `finally`, que revisa si la variable *entrada* quedó con el valor "null". Dentro del `if` hay un bloque *try-catch* para atrapar las posibles excepciones lanzada por la instrucción `close()`; el manejador atrapa excepciones genéricas e imprime el mensaje de error en consola.
+
+# 14. Dado el siguiente código en Java indique todos los posibles caminos de resolución, de acuerdo a los números que vaya leyendo del archivo.
+
+```java
+class ExcepcionE1 extends Exception {
+    public ExcepcionE1(){
+        super(); // constructor por defecto de Exception
+    }
+
+    public ExcepcionE1(String cadena){
+        super(cadena); // constructor param. de Exception
+    }
+}
+
+class ExcepcionE2 extends Exception {
+    Public ExcepcionE2(){
+        super(); // constructor por defecto de Exception
+    }
+
+    Public ExcepcionE2(String cadena){
+        super(cadena); // constructor param. de Exception
+    }
+}
+```
+
+```java
+public class Evaluacion {
+    void Evalua(int edad) throws ExcepcionE1, ExcepcionE2 {
+    if (edad < 18)
+        throw new ExcepcionE1("Es una persona menor de edad");
+    else if (edad> 70)
+        throw new ExcepcionE2("Es persona mayor de edad");
+    }
+
+    void Segmenta(int edad) throws ExcepcionE1, ExcepcionE2 {
+        if (edad < 35)
+            throw new ExcepcionE1("Es una persona joven");
+    }
+}
+```
+
+```java
+class AnalisisEdadPoblacion{
+
+    public static void main(String[] args){
+        // Para leer un fichero
+        Evaluacion Invoca = new Evaluacion();
+        FileInputSt ream entrada = null;
+        int leo;
+        try{
+            entrada = new FileInputStream("fich.txt");
+            while ((leo = entrada.read()) != -1) {
+                try {
+                    if (leo<0) {
+                        throw new ExcepcionE1("Edad inválida");
+                    } else {
+                        if (leo>120){
+                            throw new ExcepcionE1("Edad inválida");
+                        }
+                    }
+                    invoca.evalua (leo);
+                    invoca.segmenta(leo);
+                    System.out.println("Es persona adulta, Todo fue bien");
+                } catch (ExcepcionE2 e){
+                    System.out.println("Excepcion: " + e.getMessage());
+                } catch (ExcepcionE1 e){
+                    System.out.println("Excepcion: " + e.getMessage());
+                }
+            }
+        } catch (FileNotFoundException e1) {
+            System.out.println("No se encontró el archivo");
+        } catch (IOException e) {
+            System.out.println("Problema para leer los datos");
+        }finally {
+        if (entrada != null)
+            try {
+                entrada.close();
+            } catch (Exception e) {
+                System.out.println("Excepcion: " + e.getMessage());
+            }
+            System.out.println("Fichero cerrado.");
+        }
+    }
+}
+```
+* Se abre el archivo *"fich.txt"*.
+    * Si no se encontró el archivo, se lanza una excepción `FileNotFoundException`. El manejador de esta excepción imprime en pantalla *"No se encontró el archivo"* y termina la ejecución del programa.
+* Se lee una línea de texto del archivo.
+    * Si hay un problema en la operación de E/S, se lanza una excepción `IOException`. El manejador de esta excepción imprime en pantalla *"Problema para leer los datos"* y termina la ejecución del programa.
+    * Si el número leído es distinto a -1, entra al while siguiente.
+    * Si el número es -1, salta directamente al bloque `finally`.
+* Entra al while
+    * Si el número leído es menor a 0 o mayor a 120, se lanza explícitamente una excepción `ExcepcionE1`. El manejador de esta excepción imprime en pantalla *"Excepción: Edad inválida"* y termina la ejecución del programa.
+    * Se invoca al método `Evalua` de la clase **Evaluación**, enviándole como parámetro el número leído
+        * Si el número es menor a 18, se lanza una excepción `ExcepcionE1` que se propaga dinámicamente hacia el manejador del programa principal; esto termina la ejecución del método. El manejador imprime en pantalla *"Excepción: Es una persona menor de edad"* y termina la ejecución del programa principal.
+        * Si el número es mayor a 70, se lanza una excepción `ExcepcionE2` que se propaga dinámicamente hacia el manejador del programa principal; esto termina la ejecución del método. El manejador imprime en pantalla *"Excepción: Es una persona mayor de edad"* y termina la ejecución del programa principal.
+    * Se invoca al método `Segmenta` de la clase **Evaluación**, enviándole como parámetro el número leído
+        * Si el número es menor a 35, se lanza una excepción `ExcepcionE1` que se propaga dinámicamente hacia el manejador del programa principal; esto termina la ejecución del método. El manejador imprime en pantalla *"Excepción: Es una persona joven"* y termina la ejecución del programa principal.
+    * Se imprime en pantalla *"Es una persona adulta, todo fue bien"*.
+
+Si detecta un error al leer el archivo o si sale sin errores del while, se ejecuta el bloque `finally`
+* Se revisa si la variable `entrada` (donde se lee el archivo) es distinta a null.
+    * Si es distinta a null, se realiza la operación de cierre del archivo.
+        * Si hay un error al cerrar el archivo, se lanza una excepción. El manejador de las excepciones genéricas imprime en pantalla *"Excepción: "* junto con el mensaje de la excepción.
+* Imprime en pantalla *"Fichero cerrado"*.
